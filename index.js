@@ -1,32 +1,17 @@
+require("dotenv").config()
 const express = require("express")
 const cors = require("cors")
+const Note = require("./models/note")
+
+const PORT = process.env.PORT || 3001
 
 const app = express()
 app.use(cors())
 app.use(express.static("dist"))
 
-const PORT = process.env.PORT || 3001
 
 // CONFIG
 app.use(express.json())
-
-let notes = [
-    {
-        id: "1",
-        content: "HTML is easy",
-        important: true
-    },
-    {
-        id: "2",
-        content: "Bowser can execute only Mario",
-        important: false
-    },
-    {
-        id: "3",
-        content: "GET and POST are the most important methods od HTTP protocol",
-        important: true
-    }
-]
 
 const generateId = () => {
     return String(Math.max(...notes.map(n => Number(n.id))) + 1)
@@ -37,7 +22,9 @@ app.get("/", (request, response) => {
 })
 
 app.get("/api/notes", (request, response) => {
-    response.json(notes)
+    Note.find({}).then(notes => {
+        response.json(notes)
+    })
 })
 
 app.post("/api/notes", (request, response) => {
