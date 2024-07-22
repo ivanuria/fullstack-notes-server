@@ -1,10 +1,6 @@
 require("dotenv").config()
 const express = require("express")
 const cors = require("cors")
-const dns = require("node:dns")
-if (process.env.DNS) {
-    dns.setServers(dns.getServers().concat(process.env.DNS)) // This is due sometimes MongoDB is unreacheable
-}
 const Note = require("./models/note")
 
 const PORT = process.env.PORT || 3001
