@@ -4,21 +4,11 @@ const app = express()
 const cors = require('cors')
 const notesRouter = require('./controllers/notes')
 const middleware = require('./utils/middleware')
-const logger = require('./utils/logger')
-const mongoose = require('mongoose')
+const { connectMongoDB } = require('./utils/mongodb')
 
-mongoose.set('strictQuery', false)
-
-logger.info('Connecting to', config.MONGODB_URI)
-
-mongoose
-  .connect(config.MONGODB_URI)
-  .then(() => {
-    logger.info('Connected to MongoDB')
-  })
-  .catch(error => {
-    logger.error('Error connecting to MongoDB:', error.message)
-  })
+if (config.NODE_ENV !== config.NODE_ENVS.TEST) {
+  connectMongoDB(config.MONGODB_URI)
+}
 
 app.use(cors())
 app.use(express.static('dist'))

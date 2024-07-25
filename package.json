@@ -4,9 +4,9 @@
   "description": "This is a hello world program for sandbox",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon index.js",
-    "start": "node index.js",
+    "test": "cross-env NODE_ENV=test node --test",
+    "dev": "cross-env NODE_ENV=development nodemon index.js",
+    "start": "cross-env NODE_ENV=production node index.js",
     "lint": "eslint ."
   },
   "author": "Iván",
@@ -20,8 +20,11 @@
   "devDependencies": {
     "@eslint/js": "^9.7.0",
     "@stylistic/eslint-plugin-js": "^2.3.0",
+    "cross-env": "^7.0.3",
     "eslint": "^9.7.0",
-    "globals": "^15.8.0",
-    "nodemon": "^3.1.4"
+    "mongodb-memory-server": "^10.0.0",
+    "nodemon": "^3.1.4",
+    "npm": "^10.8.0",
+    "supertest": "^7.0.0"
   }
 }
