@@ -13,11 +13,8 @@ const api = supertest(app)
 
 describe('note_api', async () => {
   before(async () => {
-    mongod
-      .start()
-      .then(() => {
-        connectMongoDB(mongod.getUri())
-      })
+    await mongod.start()
+    connectMongoDB(mongod.getUri())
   })
 
   beforeEach(async () => {

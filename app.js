@@ -4,7 +4,7 @@ require('express-async-errors')
 const app = express()
 const cors = require('cors')
 const notesRouter = require('./controllers/notes')
-const usersRoute = rquire('./controllers/users')
+const usersRoute = require('./controllers/users')
 const middleware = require('./utils/middleware')
 const { connectMongoDB } = require('./utils/mongodb')
 
