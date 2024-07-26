@@ -1,6 +1,9 @@
 const { test, after, before, describe, beforeEach } = require('node:test')
 const assert = require('node:assert')
+const config = require('../utils/config')
 const Note = require('../models/note')
+const User = require('../models/user')
+const bcrypt = require('bcrypt')
 const mongoose = require('mongoose')
 const { connectMongoDB } = require('../utils/mongodb')
 const supertest = require('supertest')
@@ -15,6 +18,13 @@ describe('note_api', async () => {
   before(async () => {
     await mongod.start()
     connectMongoDB(mongod.getUri())
+    const passwordHash = await bcrypt.hash('iamroot', config.SALT_ROUNDS)
+    const user = new User({
+      username: 'root',
+      name: 'I am ROOT',
+      passwordHash
+    })
+    await user.save()
   })
 
   beforeEach(async () => {
@@ -46,9 +56,13 @@ describe('note_api', async () => {
   })
 
   test('a valid note can be added', async () => {
+
+    const user = await User.findOne({ username: 'root' })
+
     const newNote = {
       content: 'async/await simplifies making async calls',
-      important: true
+      important: true,
+      userId: user._id.toString()
     }
 
     await api

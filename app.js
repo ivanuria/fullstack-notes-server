@@ -5,6 +5,7 @@ const app = express()
 const cors = require('cors')
 const notesRouter = require('./controllers/notes')
 const usersRoute = require('./controllers/users')
+const loginRoute = require('./controllers/login')
 const middleware = require('./utils/middleware')
 const { connectMongoDB } = require('./utils/mongodb')
 
@@ -19,6 +20,7 @@ app.use(middleware.requestLogger)
 
 app.use('/api/notes', notesRouter)
 app.use('/api/users', usersRoute)
+app.use('/api/login', loginRoute)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
