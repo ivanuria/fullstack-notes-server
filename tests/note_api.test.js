@@ -56,22 +56,26 @@ describe('note_api', async () => {
   })
 
   test('a valid note can be added', async () => {
-
-    const user = await User.findOne({ username: 'root' })
+    const userData = await api
+      .post('/api/login')
+      .send({
+        username: 'root',
+        password: 'iamroot'
+      })
 
     const newNote = {
       content: 'async/await simplifies making async calls',
-      important: true,
-      userId: user._id.toString()
+      important: true
     }
 
     await api
       .post('/api/notes')
+      .set('Authorization', `Bearer ${userData.body.token}`)
       .send(newNote)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
-
+    console.log('Here it breaks')
     const notesAtEnd = await helper.notesInDb()
     assert.strictEqual(notesAtEnd.length, helper.initialNotes.length + 1)
 
@@ -80,12 +84,20 @@ describe('note_api', async () => {
   })
 
   test('note without content is not added', async () => {
+    const userData = await api
+      .post('/api/login')
+      .send({
+        username: 'root',
+        password: 'iamroot'
+      })
+
     const newNote = {
       important: true
     }
 
     await api
       .post('/api/notes')
+      .set('Authorization', `Bearer ${userData.body.token}`)
       .send(newNote)
       .expect(400)
 
